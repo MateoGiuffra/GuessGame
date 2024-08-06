@@ -45,7 +45,7 @@ namespace Guesser
         }
 
         public void StartNewGame()
-        {
+        { 
             attempts = 0;
             random = new Random();
             randomNumber = random.Next(1, 101);
