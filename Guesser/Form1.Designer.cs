@@ -23,18 +23,21 @@ namespace Guesser
 
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             lblMessage = new Label();
             txtInput = new TextBox();
             btnSubmit = new Button();
             lblFeedback = new Label();
             label1 = new Label();
             lblCounter = new Label();
+            errorProvider1 = new ErrorProvider(components);
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // lblMessage
             // 
             lblMessage.AutoSize = true;
-            lblMessage.Location = new Point(11, 12);
+            lblMessage.Location = new Point(13, 12);
             lblMessage.Name = "lblMessage";
             lblMessage.Size = new Size(193, 15);
             lblMessage.TabIndex = 0;
@@ -42,15 +45,16 @@ namespace Guesser
             // 
             // txtInput
             // 
-            txtInput.Location = new Point(14, 32);
+            txtInput.Location = new Point(16, 32);
             txtInput.Name = "txtInput";
             txtInput.Size = new Size(88, 23);
             txtInput.TabIndex = 1;
+            txtInput.TextChanged += txtInput_TextChanged;
             txtInput.KeyDown += txtInput_KeyDown;
             // 
             // btnSubmit
             // 
-            btnSubmit.Location = new Point(107, 32);
+            btnSubmit.Location = new Point(109, 32);
             btnSubmit.Name = "btnSubmit";
             btnSubmit.Size = new Size(66, 22);
             btnSubmit.TabIndex = 2;
@@ -70,13 +74,13 @@ namespace Guesser
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new System.Drawing.Font("Unispace", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Font = new System.Drawing.Font("Times New Roman", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.IndianRed;
-            label1.Location = new Point(211, 13);
+            label1.Location = new Point(206, 12);
             label1.Name = "label1";
-            label1.Size = new Size(63, 14);
+            label1.Size = new Size(73, 15);
             label1.TabIndex = 4;
-            label1.Text = "Attempts";
+            label1.Text = "ATTEMPTS";
             // 
             // lblCounter
             // 
@@ -87,6 +91,10 @@ namespace Guesser
             lblCounter.Size = new Size(14, 15);
             lblCounter.TabIndex = 5;
             lblCounter.Text = "0";
+            // 
+            // errorProvider1
+            // 
+            errorProvider1.ContainerControl = this;
             // 
             // AdivinatorApp
             // 
@@ -104,6 +112,7 @@ namespace Guesser
             Name = "AdivinatorApp";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Guess the number";
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -111,5 +120,6 @@ namespace Guesser
         private Label lblFeedback;
         private Label label1;
         private Label lblCounter;
+        private ErrorProvider errorProvider1;
     }
 }

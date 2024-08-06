@@ -18,15 +18,21 @@ namespace Guesser
         {
             InitializeComponent();
             InitializeMessages();
+            SetIconErrorProviderLocation();
             StartNewGame();
 
+        }
+
+        private void SetIconErrorProviderLocation()
+        {
+            errorProvider1.SetIconAlignment(txtInput, ErrorIconAlignment.MiddleLeft);
         }
 
         private void InitializeMessages()
         {
             highMessages = new List<string>
             {
-                "Lower. Try Again",
+                "Try with a lower number. Try Again",
                 "You Crossed. Try With A Lower Number",
                 "Too high. Write Another One."
             };
@@ -34,11 +40,11 @@ namespace Guesser
             {
                 "You Almost Get It, Try With A Higher Number.",
                 "Too low... You Can!",
-                "Very cold. Use Your Instinct!"
+                "Very low. Use Your Instinct!"
             };
         }
 
-        private void StartNewGame()
+        public void StartNewGame()
         {
             attempts = 0;
             random = new Random();
@@ -55,28 +61,49 @@ namespace Guesser
         }
         private void btnSubmit_Click(object sender, EventArgs e)
         {
-            newNumberAdded();
+            newTextAdded();
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
-                newNumberAdded();
+                newTextAdded();
                 e.SuppressKeyPress = true;
             }
         }
 
-        private void newNumberAdded()
+
+        private void newTextAdded()
         {
             if (int.TryParse(txtInput.Text, out int number))
             {
+                newNumberAdded(number);
+            }
+            else
+            {
+                errorProvider1.SetError(txtInput, "The text must be a number.");
+            }
+            txtInput.Clear();
+            txtInput.Focus();
 
-                if (number == randomNumber)
+
+        }
+
+        private void newNumberAdded(int number)
+        {
+          
+            if (number < 0 || number > 101)
+                {
+                    errorProvider1.SetError(txtInput, "The number is out of range.");
+                    return;
+
+                }
+            attempts++;
+            if (number == randomNumber)
                 {
                     numberGuessed();
-                }
-                else if (number > randomNumber)
+                }else if (number > randomNumber)
                 {
                     lblFeedback.Text = randomMessages(highMessages);
                 }
@@ -84,34 +111,32 @@ namespace Guesser
                 {
                     lblFeedback.Text = randomMessages(lowMessages);
                 }
-                attempts++;
-                lblCounter.ResetText();
-                lblCounter.Text = attempts.ToString();
-                txtInput.Clear();
-                txtInput.Focus();
-            }
-            else
-            {
-                MessageBox.Show("Please, write a valid number.");
-                txtInput.Clear();
-                txtInput.Focus();
-            }
+            
+            errorProvider1.SetError(txtInput, "");
+            lblCounter.ResetText();
+            lblCounter.Text = attempts.ToString();
+            
+
         }
 
         private void numberGuessed()
         {
-            MessageBox.Show($"¡Congratulations! The Random Number was {randomNumber}. You're right.");
-            var result = MessageBox.Show("¿Do you want to play again?", "New Game", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {
-                StartNewGame();
-            }
-            else
-            {
-                System.Windows.Forms.Application.Exit();
-            }
+            this.Hide();     
+            using (TabEndGame tabEndGame = new TabEndGame(this, this.randomNumber, this.attempts, this.Location))
+                tabEndGame.ShowDialog();
+
         }
 
+        public void newStartPosition(Point lastLocation)
+        {
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = lastLocation;
+        }
+
+        private void txtInput_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }
